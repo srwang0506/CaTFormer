@@ -42,13 +42,11 @@
 * **[2026.01.09]** The preprint version is available on [arXiv](https://arxiv.org/abs/2507.13425).
 * **[2025.11.08]** 🎉 Our paper has been accepted to **AAAI 2026**!
 
-<br>
 
 ## 📝 Abstract
 
 Accurate prediction of driving intention is key to enhancing the safety and interactive efficiency of human-machine co-driving systems. It serves as a cornerstone for achieving high-level autonomous driving. However, current approaches remain inadequate for accurately modeling the complex spatiotemporal interdependencies and the unpredictable variability of human driving behavior. To address these challenges, we propose **CaTFormer**, a causal Temporal Transformer that explicitly models causal interactions between driver behavior and environmental context for robust intention prediction. Specifically, CaTFormer introduces a novel **Reciprocal Delayed Fusion (RDF)** mechanism for precise temporal alignment of interior and exterior feature streams, a **Counterfactual Residual Encoding (CRE)** module that systematically eliminates spurious correlations to reveal authentic causal dependencies, and an innovative **Feature Synthesis Network (FSN)** that adaptively synthesizes these purified representations into coherent temporal representations. Experimental results demonstrate that CaTFormer attains state-of-the-art performance on the Brain4Cars dataset. It effectively captures complex causal temporal dependencies and enhances both the accuracy and transparency of driving intention prediction.
 
-<br>
 
 ## 🚀 Getting Started
 
@@ -80,7 +78,7 @@ pip install torch==2.1.2 torchvision==0.16.2 torchaudio==2.1.2 \
 pip install -r requirements.txt
 ```
 
-### Dataset Preparation (Brain4Cars)
+### Dataset Preparation
 
 1) Download the [Brain4Cars dataset](https://www.brain4cars.com/) and extract all videos into JPG frame sequences (both interior and exterior cameras).
 
@@ -148,7 +146,6 @@ python extract_mat.py
 # This writes `car_state.txt` beside each video folder for later loading.
 ```
 
-<br>
 
 ## 🔧 Training
 
@@ -166,7 +163,6 @@ To train on all folds for the 5-fold cross-validation:
 bash train_total.sh
 ```
 
-<br>
 
 ## 🧪 Testing
 
@@ -175,7 +171,6 @@ To evaluate the trained model, use the provided shell script:
 bash test.sh
 ```
 
-<br>
 
 ## 📚 Citation
 
