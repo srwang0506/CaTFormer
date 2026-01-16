@@ -38,6 +38,7 @@
 <br>
 
 ## 📰 News
+* **[2026.01.16]** 🚀 Code has been released on [GitHub](https://github.com/srwang0506/CaTFormer).
 * **[2026.01.09]** The preprint version is available on [arXiv](https://arxiv.org/abs/2507.13425).
 * **[2025.11.08]** 🎉 Our paper has been accepted to **AAAI 2026**!
 
