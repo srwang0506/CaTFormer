@@ -1,9 +1,9 @@
 CUDA_VISIBLE_DEVICES=0 python test.py \
-               --root_path /root/autodl-tmp/coding/ \
+               --root_path /project/CaTFormer/ \
 			   --pretrain_path \
-			   --video_path CaTFormer/brain4cars_data/road_camera \
-               --annotation_path CaTFormer/datasets/annotation \
-			   --resume_path /root/autodl-tmp/coding/CaTFormer/cog/fold0 \
+			   --video_path /project/CaTFormer/brain4cars_data/road_camera \
+               --annotation_path /project/CaTFormer/datasets/annotation \
+			   --resume_path /project/CaTFormer/cog/fold0 \
 			   --dataset Brain4cars_Unit \
 			   --batch_size 128 \
 			   --n_threads 32 \

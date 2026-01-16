@@ -1,9 +1,9 @@
 python train.py \
-               --root_path /root/autodl-tmp/coding/CaTFormer \
+               --root_path /project/CaTFormer \
 			   --pretrain_path \
-               --video_path brain4cars_data/road_camera/flow \
-               --annotation_path datasets/annotation \
-			   --result_path cog/ \
+               --video_path /project/CaTFormer/brain4cars_data/road_camera/flow \
+               --annotation_path /project/CaTFormer/datasets/annotation \
+			   --result_path /project/CaTFormer/cog/ \
 			   --dataset Brain4cars_Unit \
                --lr_step 30 \
 			   --batch_size 16 \

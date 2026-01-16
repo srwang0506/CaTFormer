@@ -31,7 +31,7 @@ if __name__ == '__main__':
     opt = parse_opts()
     set_random_seed(opt.rand_seed)
     if opt.root_path != '':
-        #opt.video_path = os.path.join(opt.root_path, opt.video_path)
+        # opt.video_path = os.path.join(opt.root_path, opt.video_path)
         opt.annotation_path = os.path.join(opt.root_path, opt.annotation_path)
         opt.result_path = os.path.join(opt.root_path, opt.result_path)
         opt.result_path = os.path.join(opt.result_path, 'fold' + str(opt.n_fold))
@@ -49,7 +49,7 @@ if __name__ == '__main__':
     out_sample_size = (144, 96)
 
     torch.manual_seed(opt.manual_seed)
-#=======================================================
+# =======================================================
     model = CaTFormer(
         feature_dim=32,
         nclass=5,

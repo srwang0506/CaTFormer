@@ -4,7 +4,7 @@ import scipy.io as scio
 
 speed_min = 200
 speed_max = 0
-root_path = '/root/autodl-tmp/coding/CaTFormer/brain4cars_data/face_camera'
+root_path = '/project/CaTFormer/brain4cars_data/face_camera'
 for action in os.listdir(root_path):
     action_dir = os.path.join(root_path,action)
     for video in os.listdir(action_dir):
@@ -26,4 +26,3 @@ for action in os.listdir(root_path):
 print(speed_max)
 print(speed_min)
 
-#data['params'][0,0][3][0]为车道线及岔路口信息,为str '1,2,0'

@@ -203,12 +203,11 @@ class UniformIntervalCrop(object):
 
         if last_input < self.size:
             out = list(range(1, self.size +1))
-            out[last_input:] = [out[last_input-1]]*(self.size-last_input)   #使用最后一帧填充
+            out[last_input:] = [out[last_input-1]]*(self.size-last_input)   #use the last frame to pad
         else:
             out = [last_input]
             while (len(out)<self.size):
                 out.append(out[-1]-interval)
-            #out.append(max(out[-1]-interval,-1))   #车内平均时使用
             out.reverse()
         return out, [target]
 
@@ -241,8 +240,7 @@ class RandomIntervalCrop(object):
 
         if last_input < self.size:
             out = list(range(1, self.size +1))
-            out[last_input:] = [out[last_input-1]]*(self.size-last_input)   #使用最后一帧填充
-        #out = [last_input-interval+1] 
+            out[last_input:] = [out[last_input-1]]*(self.size-last_input)   #use the last frame to pad
         else:
             out = []
             n = len(frame_indices)//self.size
@@ -253,7 +251,6 @@ class RandomIntervalCrop(object):
 class UniformPadSample(object):
     def __init__(self, size, interval):
         self.size = size
-        #self.interval = interval
 
     def __call__(self, frame_indices):
         last_input = frame_indices[-1]
@@ -261,12 +258,10 @@ class UniformPadSample(object):
         interval = last_input//self.size
         out = [last_input]
         ran_out = []
-        #out = [random.randint(last_input, last_input-interval)]
         
         while (len(out)<self.size):
             out.append(out[-1]-interval)
             ran_out.append(random.randint(out[-1], out[-2]))
         ran_out.append(random.randint(max(1,out[-1]-interval),out[-1]))
         ran_out.reverse()
-        #return out
         return ran_out, [target]

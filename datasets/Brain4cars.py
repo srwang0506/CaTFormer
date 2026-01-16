@@ -53,7 +53,7 @@ def get_default_image_loader():
 def video_loader(video_dir_path, frame_indices, source, image_loader):
     video = []
     for i in frame_indices:
-        image_path = os.path.join(video_dir_path, '{:d}.jpg'.format(i+source))   #source判断车内/外，车内为1，车外为0
+        image_path = os.path.join(video_dir_path, '{:d}.jpg'.format(i+source))   # source indicates inside/outside vehicle: 1 for inside, 0 for outside
         if os.path.exists(image_path) and len(video)<15:
             video.append(image_loader(image_path))
         else:
@@ -67,20 +67,18 @@ def txt_loader(txt_path,frame_indices):
     road_total = []
     car_state = []
     with open(txt_path,'r') as f:
-#         pdb.set_trace()
         for roadinfo in f:
             speed = float(roadinfo.split(',',1)[0])
-            if speed ==-1:                       #如果是未记录的车速，则赋值为12  可修改
+            if speed ==-1:    # If speed is not recorded, assign it to 12
                 speed=12
             speed = [feature_normalize(speed,speed_min,speed_max)]
             lane = roadinfo.split(',',1)[1]
             laneinfo_list = lane.split(',')
             laneinfo = []
-            laneinfo.append(min(2,int(laneinfo_list[0]))-1)  #右车道是否存在
-            laneinfo.append(min(1,int(laneinfo_list[1])-int(laneinfo_list[0])))  #左车道是否存在
+            laneinfo.append(min(2,int(laneinfo_list[0]))-1)  # Check if right lane exists
+            laneinfo.append(min(1,int(laneinfo_list[1])-int(laneinfo_list[0])))  # Check if left lane exists
             laneinfo.append(int(laneinfo_list[2][0]))
             road_total.append(speed+laneinfo)
-            #road_total.append(laneinfo)
     for i in frame_indices:
         car_state.append(road_total[i-1])
     car_state = np.array(car_state)
@@ -89,7 +87,7 @@ def txt_loader(txt_path,frame_indices):
 
 def get_default_video_loader():
     image_loader = get_default_image_loader()
-    return functools.partial(video_loader, image_loader=cv2_loader)  #修改图片加载
+    return functools.partial(video_loader, image_loader=cv2_loader)
 
 def load_annotation_data(data_file_path, fold):
     database = {}
@@ -106,9 +104,9 @@ def load_annotation_data(data_file_path, fold):
     return database
 
 def get_class_labels():
-#### define the labels map
+    # define the labels map
     class_labels_map = {}
-    class_labels_map['end_action'] = 0  #修改
+    class_labels_map['end_action'] = 0
     class_labels_map['lchange'] = 1
     class_labels_map['lturn'] = 2
     class_labels_map['rchange'] = 3
@@ -123,7 +121,7 @@ def get_video_names_and_annotations(data, subset):
         this_subset = value['subset']
         if this_subset == subset:
             label = value['label']
-            video_names.append(key[:-1])    ### key = 'rturn/20141220_154451_747_897'
+            video_names.append(key[:-1])
             annotations.append(value)
 
     return video_names, annotations
@@ -133,24 +131,24 @@ def make_dataset(root_path, annotation_path, subset, n_samples_for_each_video, e
                  sample_duration, fold):
 
     data = load_annotation_data(annotation_path, fold)
-    root_outvideo_path = '/root/autodl-tmp/sirui/TIFN/brain4cars_data/road_camera/flow/'   #车外光流根路径
-    root_invideo_path = '/root/autodl-tmp/sirui/TIFN/brain4cars_data/face_camera/'           #车内图像根路径
-    root_oriout_path = '/root/autodl-tmp/sirui/TIFN/brain4cars_data/face_camera/'                #brain4cars中的人为车外信息：车道及岔路口信息
+    root_outvideo_path = '/project/CaTFormer/brain4cars_data/road_camera/flow/'   # Root path for exterior optical flow
+    root_invideo_path = '/project/CaTFormer/brain4cars_data/face_camera/'         # Root path for interior images
+    root_oriout_path = '/project/CaTFormer/brain4cars_data/face_camera/'          # Root path for manual exterior information in brain4cars: lanes and intersections
     video_names, annotations = get_video_names_and_annotations(data, subset)
     class_to_idx = get_class_labels()
     idx_to_class = {}
     for name, label in class_to_idx.items():
-        idx_to_class[label] = name  # 对label进行编码 {0: 'end_action', 1: 'lchange', 2: 'lturn', 3: 'rchange', 4: 'rturn'}
+        idx_to_class[label] = name  # Encode labels {0: 'end_action', 1: 'lchange', 2: 'lturn', 3: 'rchange', 4: 'rturn'}
     dataset = []
     for i in range(len(video_names)):
         if i % 100 == 0:
             print('dataset loading [{}/{}]'.format(i, len(video_names)))
         video_name = video_names[i]
-#       outvideo_path = os.path.join(root_outvideo_path, video_name)+'.avi' #光流文件夹处理之后并没有带“.avi”的后缀名
+        # outvideo_path = os.path.join(root_outvideo_path, video_name)+'.avi' # Optical flow folder does not have ".avi" suffix after processing
         outvideo_path = os.path.join(root_outvideo_path, video_name)
         invideo_path = os.path.join(root_invideo_path, video_name,"img")
-        #vl = os.path.splitext(video_names[i])
-        #pdb.set_trace()
+        # vl = os.path.splitext(video_names[i])
+        # pdb.set_trace()
         outtxt_path = root_oriout_path+video_name+'/car_state.txt'
         
         if not os.path.exists(outvideo_path):
@@ -159,23 +157,22 @@ def make_dataset(root_path, annotation_path, subset, n_samples_for_each_video, e
         if not os.path.exists(invideo_path):
             print('File does not exists: %s'%invideo_path)
             continue
-
-#        n_frames = annotations[i]['n_frames']
+            
+        # n_frames = annotations[i]['n_frames']
         # count in the dir
         l = os.listdir(outvideo_path)
 
-        numdif = len(os.listdir(invideo_path))-len(l)-1  #判断车内外图片数量是否对齐
+        numdif = len(os.listdir(invideo_path))-len(l)-1  # Check if the number of interior and exterior images are aligned
         if numdif < 0:
             print('Video length is different: %s'%video_name)
         n_frames = 0
         # If there are other files (e.g. original videos) besides the images in the folder, please abstract.
-        if subset == 'validation':   #训练仍使用完整图像，测试时去掉驾驶行为发生前end_second秒
+        if subset == 'validation':   # Training still uses full images, testing removes end_second seconds before driving behavior occurs
             n_frames = len(l)-max((end_second*25-numdif),0)
         elif subset == 'training':
             n_frames = len(l)
 
-        #if n_frames < sample_duration+1 :#30*end_second                        #帧率是25还是30?
-        if n_frames <= 16 :#30*end_second
+        if n_frames <= 16:
             print('Video is too short: %s'%video_name)
             continue
 
@@ -201,14 +198,13 @@ def make_dataset(root_path, annotation_path, subset, n_samples_for_each_video, e
         else:
             if n_samples_for_each_video > 1:
                 for j in range(0, n_samples_for_each_video):
-                    sample['frame_indices'] = list(range(1, n_frames+1))        #frame_indices完全相同是为什么
+                    sample['frame_indices'] = list(range(1, n_frames+1))
                     if j%2 == 0:
                         sample['hflip'] = True
                     else:
                         sample['hflip'] = False
                     sample_j = copy.deepcopy(sample)
                     dataset.append(sample_j)
-#     pdb.set_trace()
     return dataset, idx_to_class
 
 
@@ -255,10 +251,10 @@ class Brain4cars_Inside(data.Dataset):
 
         if self.temporal_transform is not None:
             frame_indices,target_idc = self.temporal_transform(frame_indices)
-        #print(frame_indices)
+        # print(frame_indices)
         inclip = self.loader(inpath, frame_indices, 1)
         car_state = self.txt_loader(txt_path,frame_indices)
-        #if self.horizontal_flip is not None:
+        # if self.horizontal_flip is not None:
         #    p = random.random()
         #    if p < 0.5:
         #        clip = [self.horizontal_flip(img) for img in clip]
@@ -269,9 +265,9 @@ class Brain4cars_Inside(data.Dataset):
 
         inclip = torch.stack(inclip, 0)
         outclip = None
-        #if self.target_transform is not None:
+        # if self.target_transform is not None:
         #    target = [self.target_transform(img) for img in target]
-        #target = torch.stack(target, 0).permute(1, 0, 2, 3).squeeze()
+        # target = torch.stack(target, 0).permute(1, 0, 2, 3).squeeze()
         car_state = torch.FloatTensor(car_state)
         train_data = [inclip, outclip, car_state]
 
@@ -326,10 +322,10 @@ class Brain4cars_Outside(data.Dataset):
 
         if self.temporal_transform is not None:
             frame_indices,target_idc = self.temporal_transform(frame_indices)
-        #print(frame_indices)
+        # print(frame_indices)
         outclip = self.loader(outpath, frame_indices, 0)
         car_state = self.txt_loader(txt_path,frame_indices)
-        #if self.horizontal_flip is not None:
+        # if self.horizontal_flip is not None:
         #    p = random.random()
         #    if p < 0.5:
         #        clip = [self.horizontal_flip(img) for img in clip]
@@ -342,9 +338,9 @@ class Brain4cars_Outside(data.Dataset):
         outclip = torch.stack(outclip, 0)
         print(outclip.shape)
 
-        #if self.target_transform is not None:
+        # if self.target_transform is not None:
         #    target = [self.target_transform(img) for img in target]
-        #target = torch.stack(target, 0).permute(1, 0, 2, 3).squeeze()
+        # target = torch.stack(target, 0).permute(1, 0, 2, 3).squeeze()
         car_state = torch.FloatTensor(car_state)
         train_data = [inclip, outclip, car_state]
 
@@ -390,8 +386,6 @@ class Brain4cars_Unit(data.Dataset):
         Returns:
             tuple: (image, target) where target is an image.
         """
-#         pdb.set_trace()
-        
         outpath = self.data[index]['outvideo']
         inpath = self.data[index]['invideo']
         label = self.data[index]['label']
@@ -410,24 +404,24 @@ class Brain4cars_Unit(data.Dataset):
             outclip = [self.horizontal_flip(img) for img in outclip]
             label = label_hflip[str(label)]
         if self.spatial_transform_invideo is not None and self.spatial_transform_outvideo is not None:
-            #self.spatial_transform_invideo.randomize_parameters()
-            #self.spatial_transform_outvideo.randomize_parameters()
+            # self.spatial_transform_invideo.randomize_parameters()
+            # self.spatial_transform_outvideo.randomize_parameters()
             inclip = [self.spatial_transform_invideo(img) for img in inclip]
             outclip = [self.spatial_transform_outvideo(img) for img in outclip]
 
         inclip = torch.stack(inclip, 0)
         outclip = torch.stack(outclip, 0)
-        #if self.target_transform is not None:
+        # if self.target_transform is not None:
         #    target = [self.target_transform(img) for img in target]
-        #target = torch.stack(target, 0).permute(1, 0, 2, 3).squeeze()
+        # target = torch.stack(target, 0).permute(1, 0, 2, 3).squeeze()
         car_state = torch.FloatTensor(car_state)
-       #train_data = [inclip, outclip, car_state]
+        # train_data = [inclip, outclip, car_state]
         
         train_data = [inclip, outclip, car_state,outpath]
             
         
         if self.subset=='validation':
-                return train_data, label, vid,frame_indices  #frame_indices在按照brain4cars进行提前预测时间测试时使用
+                return train_data, label, vid,frame_indices
         else:
             return train_data, label
     def __len__(self):
