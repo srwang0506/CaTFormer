@@ -1,0 +1,22 @@
+python train.py \
+               --root_path /root/autodl-tmp/coding/CaTFormer \
+			   --pretrain_path \
+               --video_path brain4cars_data/road_camera/flow \
+               --annotation_path datasets/annotation \
+			   --result_path cog/ \
+			   --dataset Brain4cars_Unit \
+               --lr_step 30 \
+			   --batch_size 16 \
+			   --n_threads 0 \
+			   --checkpoint 2  \
+			   --n_epochs 160 \
+			   --begin_epoch 1 \
+			   --sample_duration 16 \
+			   --end_second 0 \
+			   --interval 15 \
+			   --n_scales 1 \
+			   --learning_rate 0.001 \
+			   --norm_value 255 \
+			   --n_fold 3 \
+			   --train_from_scratch 0
+

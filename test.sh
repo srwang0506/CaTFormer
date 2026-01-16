@@ -1,0 +1,25 @@
+CUDA_VISIBLE_DEVICES=0 python test.py \
+               --root_path /root/autodl-tmp/coding/ \
+			   --pretrain_path \
+			   --video_path CaTFormer/brain4cars_data/road_camera \
+               --annotation_path CaTFormer/datasets/annotation \
+			   --resume_path /root/autodl-tmp/coding/CaTFormer/cog/fold0 \
+			   --dataset Brain4cars_Unit \
+			   --batch_size 128 \
+			   --n_threads 32 \
+			   --checkpoint 2  \
+			   --n_epochs 100 \
+			   --begin_epoch 1 \
+			   --train_crop 'driver focus' \
+			   --sample_duration 16 \
+			   --end_second 0 \
+			   --interval 15 \
+			   --n_scales 1 \
+			   --learning_rate 0.001 \
+			   --norm_value 255 \
+			   --n_fold 0 \
+			   --train_from_scratch 0 \
+			   --last_epoch 2 \
+               --test_start_epoch 0 \
+               --test_end_epoch 160 \
+			   --threshold 1
