@@ -5,7 +5,7 @@
 </h1>
 
 <div style="font-size: 1.2rem; margin-bottom: 5px;">
-  <a href="https://github.com/srwang0506" style="text-decoration: none;"><strong>Sirui Wang</strong></a><sup>†</sup>&emsp;
+  <a href="https://srwang0506.github.io/" style="text-decoration: none;"><strong>Sirui Wang</strong></a><sup>†</sup>&emsp;
   <a href="https://github.com/Jokerealm" style="text-decoration: none;"><strong>Zhou Guan</strong></a><sup>†</sup>&emsp;
   <a href="https://github.com/pancacake" style="text-decoration: none;"><strong>Bingxi Zhao</strong></a>&emsp;
   <a href="https://github.com/Dean1217" style="text-decoration: none;"><strong>Tongjia Gu</strong></a>&emsp;
