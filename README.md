@@ -66,8 +66,17 @@ git clone https://github.com/srwang0506/CaTFormer.git
 cd CaTFormer
 ```
 
-2. Install dependencies:
+2. Setup environment and install dependencies:
 ```bash
+# create env
+conda create -n catformer python=3.10 -y
+conda activate catformer
+
+# install Pytorch and CUDA
+pip install torch==2.1.2 torchvision==0.16.2 torchaudio==2.1.2 \
+  --index-url https://download.pytorch.org/whl/cu121
+
+# other deps
 pip install -r requirements.txt
 ```
 
